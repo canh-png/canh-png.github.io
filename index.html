@@ -70,7 +70,7 @@
     let items = JSON.parse(localStorage.getItem(key)||'[]');
     function render(){
       listEl.innerHTML='';
-      items.forEach((t,i)=>{
+      items.forEach((t,i)=>{b
         const li=document.createElement('li');
         li.className='card'; li.style.padding='10px';
         li.innerHTML = `<label style="display:flex;gap:10px;align-items:center">
