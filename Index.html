@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nguyễn Văn Cảnh — Dev</title>
+  <meta name="description" content="Trang dev ngắn gọn của Nguyễn Văn Cảnh." />
+  <style>
+    :root{--bg:#f9fafb;--ink:#0f172a;--muted:#475569;--brand:#2563eb;--soft:#e2e8f0}
+    *{box-sizing:border-box} body{margin:0;font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial;background:radial-gradient(1200px 600px at 10% -10%,#e0f2fe,transparent),radial-gradient(1000px 500px at 100% 0%,#e9d5ff,transparent),var(--bg);color:var(--ink)}
+    .container{max-width:860px;margin:auto;padding:24px}
+    header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border:1px solid var(--soft);border-radius:16px;background:#fff;box-shadow:0 6px 20px rgba(2,6,23,.06);animation:pop .5s ease-out both}
+    h1{margin:0;font-size:clamp(26px,5vw,34px)} h2{font-size:18px;margin:18px 0 8px}
+    .badge{display:inline-block;padding:6px 10px;border:1px solid var(--soft);border-radius:999px;background:#fff;color:var(--muted);font-size:12px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+    .card{border:1px solid var(--soft);border-radius:16px;background:#fff;padding:16px;box-shadow:0 6px 20px rgba(2,6,23,.06);transition:transform .2s ease, box-shadow .2s ease}
+    .card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(2,6,23,.08)}
+    a.button{display:inline-flex;gap:8px;align-items:center;background:var(--brand);color:#fff;text-decoration:none;padding:8px 12px;border-radius:12px;font-weight:600}
+    a.link{color:var(--brand);text-decoration:none} a.link:hover{text-decoration:underline}
+    footer{margin-top:20px;text-align:center;color:var(--muted);font-size:13px}
+    @keyframes pop{from{transform:translateY(6px);opacity:.0}to{transform:translateY(0);opacity:1}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Nguyễn Văn Cảnh</h1>
+        <div class="badge">Sinh viên • Web developer</div>
+      </div>
+      <nav style="display:flex;gap:8px;flex-wrap:wrap">
+        <a class="button" href="https://github.com/your-github" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="button" style="background:#0ea5e9" href="mailto:canh@example.com">Liên hệ</a>
+      </nav>
+    </header>
+
+    <section style="margin-top:18px" class="grid">
+      <div class="card">
+        <h2>Giới thiệu</h2>
+        <p>Xin chào! Mình là Cảnh, thích làm web gọn nhẹ, dễ dùng. Mục tiêu: nâng kỹ năng HTML, CSS, JavaScript và nền tảng .NET.</p>
+        <p><b>Kỹ năng chính:</b> HTML • CSS • JavaScript • C# (cơ bản)</p>
+      </div>
+      <div class="card">
+        <h2>Dự án nhanh</h2>
+        <p><b>To‑Do Mini</b> – danh sách việc đơn giản, lưu LocalStorage, giao diện responsive.</p>
+        <p><a class="link" href="#demo">Xem demo bên dưới</a></p>
+      </div>
+    </section>
+
+    <!-- Demo cực ngắn: To‑Do Mini bằng JS thuần -->
+    <section id="demo" style="margin-top:16px" class="card">
+      <h2>To‑Do Mini (demo)</h2>
+      <div style="display:flex;gap:8px;align-items:center;margin:8px 0">
+        <input id="todo-input" placeholder="Việc cần làm..." style="flex:1;padding:8px 10px;border:1px solid var(--soft);border-radius:10px"/>
+        <button id="todo-add" class="button" style="border:none">Thêm</button>
+      </div>
+      <ul id="todo-list" style="list-style:none;padding:0;margin:0;display:grid;gap:8px"></ul>
+    </section>
+
+    <footer>© <span id="y"></span> Nguyễn Văn Cảnh • Làm nhanh bằng HTML/CSS/JS</footer>
+  </div>
+
+  <script>
+    // năm
+    document.getElementById('y').textContent = new Date().getFullYear();
+    // To‑Do Mini
+    const key='canh.todo';
+    const $ = s=>document.querySelector(s);
+    const listEl = $('#todo-list');
+    let items = JSON.parse(localStorage.getItem(key)||'[]');
+    function render(){
+      listEl.innerHTML='';
+      items.forEach((t,i)=>{
+        const li=document.createElement('li');
+        li.className='card'; li.style.padding='10px';
+        li.innerHTML = `<label style="display:flex;gap:10px;align-items:center">
+          <input type="checkbox" ${t.done?'checked':''}>
+          <span style="flex:1;${t.done?'text-decoration:line-through;color:#94a3b8':''}">${t.text}</span>
+          <button data-del class="button" style="background:#ef4444">Xoá</button>
+        </label>`;
+        li.querySelector('input').onchange=()=>{ items[i].done=!items[i].done; save(); };
+        li.querySelector('[data-del]').onclick=()=>{ items.splice(i,1); save(); };
+        listEl.appendChild(li);
+      });
+    }
+    function save(){ localStorage.setItem(key,JSON.stringify(items)); render(); }
+    $('#todo-add').onclick=()=>{ const v=$('#todo-input').value.trim(); if(!v) return; items.unshift({text:v,done:false}); $('#todo-input').value=''; save(); };
+    render();
+  </script>
+</body>
+</html>
